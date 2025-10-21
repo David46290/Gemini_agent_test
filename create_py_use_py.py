@@ -7,7 +7,8 @@ def make_new_code(new_addon='', addon_name=''):
     # main.py
     the_main = f"""if __name__ == "__main__":\n
     try:
-        print({addon_name}())
+        {addon_name}()
+        print('execution successful')
     except Exception as e:
         print({{e}})
     """
@@ -16,8 +17,8 @@ def make_new_code(new_addon='', addon_name=''):
     with open("new_script.py", "w", encoding="utf-8") as f:
         f.write(new_code)
 
-def run_new_code(retry_time=0, retry_limit=1):
-    result = subprocess.run([sys.executable, "new_script.py"], capture_output=True, text=True, cwd=os.getcwd()).stdout.strip() # string
+def run_new_code(code_name="new_script.py",  retry_time=0, retry_limit=1):
+    result = subprocess.run([sys.executable, code_name], capture_output=True, text=True, cwd=os.getcwd()).stdout.strip() # string
     error_alarm = "|Error Encountered|"
     is_error = False
     if 'Error' in result:
@@ -28,7 +29,8 @@ def run_new_code(retry_time=0, retry_limit=1):
             print(f'Try downloading {missing_module}......retry time:{retry_time}')
             install_missing_module(missing_module, retry_time=retry_time, retry_limit=retry_limit)
     else:
-        print(result + str(retry_time))
+        # print(result + str(retry_time))
+        print(result)
     return is_error
 
 def install_missing_module(module_name, retry_time, retry_limit=0):
