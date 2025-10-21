@@ -17,7 +17,7 @@ def make_new_code(new_addon='', addon_name=''):
         f.write(new_code)
 
 def run_new_code():
-    result = subprocess.run(["python", "new_script.py"], capture_output=True, text=True, cwd=os.getcwd()).stdout.strip() # string
+    result = subprocess.run([sys.executable, "new_script.py"], capture_output=True, text=True, cwd=os.getcwd()).stdout.strip() # string
     error_alarm = "|error encountered|:"
     if 'Error' in result:
         result = error_alarm + result
@@ -33,3 +33,4 @@ if __name__ == "__main__":
     make_new_code(new_addon, addon_name)
     run_new_code()
     
+
