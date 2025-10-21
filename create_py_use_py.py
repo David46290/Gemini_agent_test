@@ -23,6 +23,7 @@ def run_new_code(code_name="new_script.py",  retry_time=0, retry_limit=1):
     is_error = False
     if 'Error' in result:
         print(error_alarm)
+        print(result)
         is_error = True
         if 'ModuleNotFoundError' in result:
             missing_module = result.split('named')[-1].split('\'')[1]
@@ -50,11 +51,6 @@ def install_missing_module(module_name, retry_time, retry_limit=0):
 
 def build_new_addon():
     new_addon = """
-    import numpy as np
-    import scipy
-    import matplotlib
-    arr = np.arange(1, 11)
-    print(arr)
     return 'function succeed'
     """
     return new_addon
