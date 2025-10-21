@@ -1,4 +1,4 @@
-import subprocess
+import subprocess, sys
 import os
 
 def make_new_code(new_addon='', addon_name=''):
@@ -18,19 +18,23 @@ def make_new_code(new_addon='', addon_name=''):
 
 def run_new_code():
     result = subprocess.run([sys.executable, "new_script.py"], capture_output=True, text=True, cwd=os.getcwd()).stdout.strip() # string
-    error_alarm = "|error encountered|:"
+    error_alarm = "|Error Encountered|:"
     if 'Error' in result:
-        result = error_alarm + result
+        print(error_alarm)
+    if 'ModuleNotFoundError' in result:
+        missing_module = result.split('named')[-1].split('\'')[1]
+        print(f'Please download {missing_module} first')
     print(result)
 
 if __name__ == "__main__":
     addon_name = 'new_func'
     new_addon = """
-    import numpy as np
+    
+    import scipy as sci
     arr = np.arange(1, 11)
+    print(arr)
     return 'function successed'
     """
     make_new_code(new_addon, addon_name)
     run_new_code()
     
-
