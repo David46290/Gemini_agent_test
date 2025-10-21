@@ -25,10 +25,10 @@ def run_new_code(retry_time=0, retry_limit=1):
         is_error = True
         if 'ModuleNotFoundError' in result:
             missing_module = result.split('named')[-1].split('\'')[1]
-            print(f'Try downloading {missing_module}......')
+            print(f'Try downloading {missing_module}......retry time:{retry_time}')
             install_missing_module(missing_module, retry_time=retry_time, retry_limit=retry_limit)
     else:
-        print(result)
+        print(result + str(retry_time))
     return is_error
 
 def install_missing_module(module_name, retry_time, retry_limit=0):
@@ -49,9 +49,11 @@ def install_missing_module(module_name, retry_time, retry_limit=0):
 def build_new_addon():
     new_addon = """
     import numpy as np
+    import scipy
+    import matplotlib
     arr = np.arange(1, 11)
     print(arr)
-    return 'function successed'
+    return 'function succeed'
     """
     return new_addon
 
@@ -59,5 +61,5 @@ if __name__ == "__main__":
     addon_name = 'new_func'
     new_addon = build_new_addon()
     make_new_code(new_addon, addon_name)
-    run_new_code(retry_limit=3)
+    run_new_code(retry_limit=2)
     
