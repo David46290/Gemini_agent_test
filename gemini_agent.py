@@ -1,6 +1,12 @@
 import os
 from google import genai
 from google.genai.errors import APIError
+import create_py_use_py as cpup
+
+def make_new_code(new_addon='', addon_name=''):
+    
+    with open("temp_script.py", "w", encoding="utf-8") as f:
+        f.write(new_addon)
 
 def py_code_generator(content):
     model_name = 'gemini-2.5-flash'
@@ -24,15 +30,23 @@ def py_code_generator(content):
             contents=content
         )
         print("Giving the answer:\n")
+        answer_log = response.text.split(split_criteria['head'])[-1].split(split_criteria['tail'])[0]
+        # answer_log = ""
         answer_text = response.text.split(split_criteria['head'])[-1].split(split_criteria['tail'])[0].split('\n')
         for idx, string in enumerate(answer_text):
             # if_delete = False
             if (len(string) == 0): # empty string
                 del answer_text[idx]
-            else:
-                print(string)
-
-        print('Answer given. Anything else?')
+            # else:
+                # print(string)
+                # answer_log = answer_log + '\n\t' + string
+        
+        print('Generating Python code to execute.....')
+        make_new_code(answer_log)
+        # cpup.make_new_code(new_addon=answer_log, addon_name='test')
+        print('Generation completed. Executing......')
+        cpup.run_new_code(code_name="temp_script.py", retry_time=0, retry_limit=3)
+        print('Execution completed. Anything else?')
 
     except APIError as e:
         print(f"API find to connect or other error occurs: {e}")
