@@ -1,4 +1,5 @@
 import subprocess
+import os
 
 def make_new_code(new_addon='', addon_name=''):
     func_def = f"def {addon_name}():"
@@ -8,7 +9,7 @@ def make_new_code(new_addon='', addon_name=''):
     try:
         print({addon_name}())
     except Exception as e:
-        print("|error encountered|:" + e)
+        print({{e}})
     """
     new_code = func_def + '\n' + new_addon + '\n' + the_main
     
@@ -16,13 +17,17 @@ def make_new_code(new_addon='', addon_name=''):
         f.write(new_code)
 
 def run_new_code():
-    result = subprocess.run(["python", "new_script.py"], capture_output=True, text=True) # string
+    result = subprocess.run(["python", "new_script.py"], capture_output=True, text=True, cwd=os.getcwd()).stdout.strip() # string
     error_alarm = "|error encountered|:"
-    print(result.stdout.strip())
+    if 'Error' in result:
+        result = error_alarm + result
+    print(result)
 
 if __name__ == "__main__":
     addon_name = 'new_func'
     new_addon = """
+    import numpy as np
+    arr = np.arange(1, 11)
     return 'function successed'
     """
     make_new_code(new_addon, addon_name)
