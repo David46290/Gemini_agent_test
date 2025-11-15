@@ -2,6 +2,9 @@ import os
 from google import genai
 from google.genai.errors import APIError
 import create_py_use_py as cpup
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def make_new_code(new_addon='', addon_name=''):
     
